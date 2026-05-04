@@ -3,6 +3,16 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: 'Latest guides and tips for downloading Twitter GIFs and videos.',
+  alternates: {
+    canonical: '/blog',
+  },
+};
+
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();

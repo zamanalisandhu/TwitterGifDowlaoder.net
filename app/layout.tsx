@@ -33,7 +33,9 @@ export const metadata: Metadata = {
   creator: 'TwitterGIFDownloader.net',
   publisher: 'TwitterGIFDownloader.net',
   formatDetection: { telephone: false, email: false, address: false },
-  alternates: { canonical: 'https://twittergifdownloader.net' },
+  alternates: { 
+    canonical: './' 
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
