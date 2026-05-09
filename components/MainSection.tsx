@@ -4,7 +4,6 @@ import { useState, useEffect, Suspense } from "react";
 import dynamic from 'next/dynamic';
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import { Toaster } from "sonner";
 
 // Lazy load below-fold sections for performance
 const WhatIsSection = dynamic(() => import("@/components/WhatIsSection"));
@@ -45,7 +44,6 @@ export default function MainSection() {
       </Suspense>
       
       <Footer />
-      <Toaster position="top-center" richColors />
     </main>
   );
 }

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Blog',
   description: 'Latest guides and tips for downloading Twitter GIFs and videos.',
   alternates: {
-    canonical: '/blog',
+    canonical: 'https://twittergifdownloader.net/blog',
   },
 };
 
@@ -21,7 +21,7 @@ export default async function BlogPage() {
     <main className="min-h-screen premium-gradient">
       <Navbar />
       
-      <div className="pt-32 pb-20 container mx-auto px-4">
+      <div className="pt-20 pb-12 container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter">
             Our <span className="text-gradient">Blog</span>
@@ -33,21 +33,13 @@ export default async function BlogPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {posts.map((post: any) => (
-            <Link key={post.id} href={`/blog/${post.slug}`}>
-              <article className="group relative h-full glass-morphism rounded-3xl border border-white/5 overflow-hidden hover:border-white/20 transition-all">
-                <div className="aspect-video relative overflow-hidden">
-                  <img 
-                    src={post.image} 
-                    alt={post.title}
-                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-primary text-white text-xs font-bold">
+            <Link key={post.id} href={`/${post.slug}`}>
+              <article className="group relative h-full glass-morphism rounded-3xl border border-white/5 overflow-hidden hover:border-white/20 transition-all p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest">
                     {post.category}
                   </div>
-                </div>
-                
-                <div className="p-8">
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
+                  <div className="flex items-center gap-4 text-[10px] text-muted-foreground uppercase tracking-widest">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
                       {post.date}
@@ -57,6 +49,7 @@ export default async function BlogPage() {
                       {post.readTime}
                     </div>
                   </div>
+                </div>
                   
                   <h2 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors line-clamp-2">
                     {post.title}
@@ -70,7 +63,6 @@ export default async function BlogPage() {
                     Read More
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>
-                </div>
               </article>
             </Link>
           ))}

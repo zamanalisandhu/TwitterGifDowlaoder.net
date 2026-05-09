@@ -21,9 +21,9 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-white mb-6 uppercase text-xs tracking-widest">Product</h4>
             <ul className="space-y-4 text-sm text-muted-foreground">
-              <li><Link href="/twitter-video-downloader" className="hover:text-primary transition-colors">Video Downloader</Link></li>
-              <li><Link href="/twitter-image-downloader" className="hover:text-primary transition-colors">Image Downloader</Link></li>
-              <li><Link href="/twitter-thread-reader" className="hover:text-primary transition-colors">Thread Saver</Link></li>
+              <li>Video Downloader</li>
+              <li>Image Downloader</li>
+              <li>Thread Saver</li>
               <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
             </ul>
           </div>
@@ -34,6 +34,8 @@ export default function Footer() {
               <li><Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
               <li><Link href="/dmca" className="hover:text-primary transition-colors">DMCA</Link></li>
+              <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
             </ul>
           </div>
 
@@ -43,7 +45,7 @@ export default function Footer() {
               <Link href="#" aria-label="Follow us on Twitter/X" className="w-12 h-12 rounded-xl glass flex items-center justify-center hover:text-primary transition-all border border-white/5">
                 <Twitter className="w-5 h-5" aria-hidden="true" />
               </Link>
-              <Link href="#" aria-label="Contact us via email" className="w-12 h-12 rounded-xl glass flex items-center justify-center hover:text-primary transition-all border border-white/5">
+              <Link href="/contact" aria-label="Contact us" className="w-12 h-12 rounded-xl glass flex items-center justify-center hover:text-primary transition-all border border-white/5">
                 <Mail className="w-5 h-5" aria-hidden="true" />
               </Link>
             </div>
@@ -51,7 +53,7 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-white/5 text-center">
-          <p className="text-xs sm:text-sm text-muted-foreground">
+          <p suppressHydrationWarning className="text-xs sm:text-sm text-muted-foreground">
             © {new Date().getFullYear()} TwitterGIFDownloader.net. All rights reserved.
           </p>
           <p className="mt-2 text-[10px] opacity-40 uppercase tracking-[0.2em] text-muted-foreground">

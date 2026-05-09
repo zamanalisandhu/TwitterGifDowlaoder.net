@@ -28,9 +28,9 @@ const steps = [
 
 export default function DetailedGuide() {
   return (
-    <section id="how-it-works" aria-labelledby="detailed-guide-heading" className="py-12 sm:py-20 relative px-4 sm:px-6 lg:px-8">
+    <section id="how-it-works" aria-labelledby="detailed-guide-heading" className="py-8 sm:py-12 relative px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <header className="text-center mb-12 sm:mb-16">
+        <header className="text-center mb-8 sm:mb-12">
           <h2 id="detailed-guide-heading" className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4 px-4 leading-tight">
             How to Use Our Twitter GIF Downloader — Complete Guide
           </h2>

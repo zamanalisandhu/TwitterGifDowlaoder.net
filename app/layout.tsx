@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "sonner";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -34,7 +35,13 @@ export const metadata: Metadata = {
   publisher: 'TwitterGIFDownloader.net',
   formatDetection: { telephone: false, email: false, address: false },
   alternates: { 
-    canonical: './' 
+    canonical: 'https://twittergifdownloader.net' 
+  },
+  applicationName: 'TwitterGIFDownloader',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'TwitterGIFDownloader',
   },
   openGraph: {
     type: 'website',
@@ -71,6 +78,9 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   manifest: '/manifest.json',
+  verification: {
+    google: 'HSWPL4OMveot57q_f_aFJ1tudIHP_nyyONIxjuJDe-g',
+  },
 };
 
 export default function RootLayout({
@@ -81,8 +91,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className={inter.className}>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-37H5WQHP4P"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-37H5WQHP4P');
+          `}
+        </Script>
+        
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <SchemaMarkup />
           {children}
           <Toaster position="top-center" richColors />
         </ThemeProvider>

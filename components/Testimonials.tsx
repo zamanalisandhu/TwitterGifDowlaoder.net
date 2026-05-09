@@ -30,7 +30,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" aria-labelledby="testimonials-heading" className="py-8 relative overflow-hidden">
+    <section id="testimonials" aria-labelledby="testimonials-heading" className="py-8 sm:py-12 relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 id="testimonials-heading" className="text-3xl md:text-5xl font-extrabold mb-4">Twitter GIF Downloader Reviews from Real Users</h2>

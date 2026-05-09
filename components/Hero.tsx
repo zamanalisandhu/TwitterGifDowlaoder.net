@@ -93,7 +93,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-12 sm:py-20 relative overflow-hidden flex items-center justify-center min-h-[70vh]">
+    <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative overflow-hidden flex items-center justify-center min-h-[50vh]">
       {/* Background Orbs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] -z-10 animate-pulse" aria-hidden="true" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] -z-10 animate-pulse delay-700" aria-hidden="true" />
