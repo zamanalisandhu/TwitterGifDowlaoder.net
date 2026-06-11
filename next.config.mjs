@@ -33,7 +33,7 @@ const nextConfig = {
       style-src 'self' 'unsafe-inline';
       img-src 'self' data: https:;
       font-src 'self' data:;
-      connect-src 'self' https://twittergifapi.techiesline.workers.dev https://*.google-analytics.com https://formspree.io;
+      connect-src 'self' https://twittergifapi.techiesline.workers.dev https://*.google-analytics.com https://formspree.io https://unpkg.com;
       frame-ancestors 'none';
     `.replace(/\s{2,}/g, ' ').trim();
 
@@ -47,6 +47,8 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+          { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
           { key: 'Content-Security-Policy', value: cspHeader },
         ],
       },

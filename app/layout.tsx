@@ -91,6 +91,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <body className={inter.className}>
+        {/* Google AdSense */}
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1175254374210149"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-37H5WQHP4P"
@@ -106,6 +113,7 @@ export default function RootLayout({
         </Script>
         
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <SchemaMarkup />
           {children}
           <Toaster position="top-center" richColors />
         </ThemeProvider>

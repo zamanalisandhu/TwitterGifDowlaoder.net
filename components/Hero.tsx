@@ -13,7 +13,7 @@ import {
   Sparkles,
   Star
 } from "lucide-react";
-import { fetchTweetGif, getGifDownloadUrl, isValidTwitterUrl, ApiResponse } from '@/lib/api';
+import { fetchTweetGif, downloadAsGif, isValidTwitterUrl, ApiResponse } from '@/lib/api';
 import ToolResult from "./ToolResult";
 
 export default function Hero() {
@@ -22,6 +22,7 @@ export default function Hero() {
   const [result, setResult] = useState<ApiResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [downloadingGif, setDownloadingGif] = useState<string | null>(null);
+  const [gifProgress, setGifProgress] = useState<{ pct: number; status: string } | null>(null);
 
   const handleDownload = useCallback(async () => {
     setError(null);
@@ -78,17 +79,19 @@ export default function Hero() {
   }, []);
 
   const handleGifDownload = useCallback(async (sourceUrl: string) => {
+    setError(null);
     setDownloadingGif(sourceUrl);
+    setGifProgress({ pct: 5, status: 'Starting conversion...' });
+
     try {
-      const gifUrl = getGifDownloadUrl(sourceUrl);
-      const link = document.createElement('a');
-      link.href = gifUrl;
-      link.download = 'twitter.gif';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      await downloadAsGif(sourceUrl, (pct, status) => {
+        setGifProgress({ pct, status });
+      });
+    } catch (err) {
+      setError('Conversion failed. Please try again.');
     } finally {
-      setTimeout(() => setDownloadingGif(null), 1500);
+      setDownloadingGif(null);
+      setGifProgress(null);
     }
   }, []);
 
@@ -164,6 +167,26 @@ export default function Hero() {
               </button>
             </div>
           </div>
+
+          {gifProgress && (
+            <div className="mt-4 max-w-2xl mx-auto px-4">
+              <div className="rounded-2xl bg-[#0F0F18] border border-white/10 p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold text-white">{gifProgress.pct}%</p>
+                    <p className="text-sm text-gray-400">{gifProgress.status}</p>
+                  </div>
+                  <p className="text-[10px] text-gray-500 sm:text-right">Converting in your browser — no upload needed</p>
+                </div>
+                <div className="mt-3 h-2 w-full rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#1DA1F2] to-[#8B5CF6] transition-all duration-300"
+                    style={{ width: `${gifProgress.pct}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           <div aria-live="polite">
             <AnimatePresence>
