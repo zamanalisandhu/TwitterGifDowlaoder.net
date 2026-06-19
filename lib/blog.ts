@@ -12,6 +12,25 @@ export interface Post {
 
 const WP_API_URL = "https://admin.twittergifdownloader.net/wp-json/wp/v2";
 
+function decodeHtml(html: string): string {
+  if (!html) return "";
+  return html
+    .replace(/&amp;/g, "&")
+    .replace(/&#038;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#8217;/g, "'")
+    .replace(/&#8216;/g, "'")
+    .replace(/&#8220;/g, '"')
+    .replace(/&#8221;/g, '"')
+    .replace(/&#8211;/g, "–")
+    .replace(/&#8212;/g, "—")
+    .replace(/&#8230;/g, "…")
+    .replace(/&nbsp;/g, " ");
+}
+
 function calculateReadTime(text: string): string {
   const wordsPerMinute = 200;
   const cleanText = text.replace(/<[^>]+>/g, ''); // Remove HTML tags
@@ -41,19 +60,33 @@ export async function getBlogPosts(): Promise<Post[]> {
       const categories = post._embedded?.['wp:term']?.[0] || [];
       const categoryName = categories.length > 0 ? categories[0].name : "General";
       
-      const contentHtml = post.content?.rendered || "";
+      const rawContent = post.content?.rendered || "";
+      const contentHtml = decodeHtml(rawContent);
+      
       const rawExcerpt = post.excerpt?.rendered || "";
-      const cleanExcerpt = rawExcerpt.replace(/<[^>]+>/g, '').replace(/\[&hellip;\]/g, '...').trim();
+      const cleanExcerpt = decodeHtml(
+        rawExcerpt.replace(/<[^>]+>/g, '').replace(/\[&hellip;\]/g, '...').trim()
+      );
+
+      // Support fallback fields if wp:featuredmedia is forbidden/restricted
+      const featuredImageUrl = post.featured_image_url || 
+                               post.featured_image_src || 
+                               post.featured_media_src_url || 
+                               featuredMedia?.source_url;
+      const fallbackImage = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=800";
+      const finalImageUrl = (featuredImageUrl && typeof featuredImageUrl === 'string' && featuredImageUrl.startsWith('http')) 
+        ? featuredImageUrl 
+        : fallbackImage;
 
       return {
         id: post.id.toString(),
         slug: post.slug,
-        title: post.title?.rendered || "",
+        title: decodeHtml(post.title?.rendered || ""),
         excerpt: cleanExcerpt,
         date: post.date ? post.date.split("T")[0] : "",
         readTime: calculateReadTime(contentHtml),
-        category: categoryName,
-        image: featuredMedia?.source_url || "/og-image.png",
+        category: decodeHtml(categoryName),
+        image: finalImageUrl,
         content: contentHtml,
       };
     });
@@ -84,19 +117,32 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
     const categories = post._embedded?.['wp:term']?.[0] || [];
     const categoryName = categories.length > 0 ? categories[0].name : "General";
     
-    const contentHtml = post.content?.rendered || "";
+    const rawContent = post.content?.rendered || "";
+    const contentHtml = decodeHtml(rawContent);
+    
     const rawExcerpt = post.excerpt?.rendered || "";
-    const cleanExcerpt = rawExcerpt.replace(/<[^>]+>/g, '').replace(/\[&hellip;\]/g, '...').trim();
+    const cleanExcerpt = decodeHtml(
+      rawExcerpt.replace(/<[^>]+>/g, '').replace(/\[&hellip;\]/g, '...').trim()
+    );
+
+    const featuredImageUrl = post.featured_image_url || 
+                             post.featured_image_src || 
+                             post.featured_media_src_url || 
+                             featuredMedia?.source_url;
+    const fallbackImage = "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=800";
+    const finalImageUrl = (featuredImageUrl && typeof featuredImageUrl === 'string' && featuredImageUrl.startsWith('http')) 
+      ? featuredImageUrl 
+      : fallbackImage;
 
     return {
       id: post.id.toString(),
       slug: post.slug,
-      title: post.title?.rendered || "",
+      title: decodeHtml(post.title?.rendered || ""),
       excerpt: cleanExcerpt,
       date: post.date ? post.date.split("T")[0] : "",
       readTime: calculateReadTime(contentHtml),
-      category: categoryName,
-      image: featuredMedia?.source_url || "/og-image.png",
+      category: decodeHtml(categoryName),
+      image: finalImageUrl,
       content: contentHtml,
     };
   } catch (error) {
