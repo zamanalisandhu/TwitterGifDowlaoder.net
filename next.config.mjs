@@ -10,7 +10,8 @@ const nextConfig = {
       'pbs.twimg.com', 
       'video.twimg.com', 
       'i.pravatar.cc', 
-      'twittergifapi.techiesline.workers.dev'
+      'twittergifapi.techiesline.workers.dev',
+      'admin.twittergifdownloader.net'
     ],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -33,7 +34,7 @@ const nextConfig = {
       style-src 'self' 'unsafe-inline';
       img-src 'self' data: https:;
       font-src 'self' data:;
-      connect-src 'self' https://twittergifapi.techiesline.workers.dev https://*.google-analytics.com https://formspree.io https://unpkg.com;
+      connect-src 'self' https://twittergifapi.techiesline.workers.dev https://admin.twittergifdownloader.net https://*.google-analytics.com https://formspree.io https://unpkg.com;
       frame-ancestors 'none';
     `.replace(/\s{2,}/g, ' ').trim();
 
