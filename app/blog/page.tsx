@@ -36,7 +36,7 @@ export default async function BlogPage() {
             <Link key={post.id} href={`/${post.slug}`}>
               <article className="group relative h-full glass-morphism rounded-3xl border border-white/5 overflow-hidden hover:border-white/20 transition-all p-8">
                 {post.image && (
-                  <div className="aspect-video w-full mb-6 rounded-2xl overflow-hidden relative border border-white/5 bg-white/5">
+                  <div className="aspect-[1200/628] w-full mb-6 rounded-2xl overflow-hidden relative border border-white/5 bg-white/5">
                     <img 
                       src={post.image} 
                       alt={post.title} 

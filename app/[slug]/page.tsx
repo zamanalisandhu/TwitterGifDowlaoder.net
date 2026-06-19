@@ -81,7 +81,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </div>
         
         {post.image && (
-          <div className="mb-12 rounded-3xl overflow-hidden border border-white/10 aspect-video relative max-w-4xl mx-auto shadow-2xl bg-white/5">
+          <div className="mb-12 rounded-3xl overflow-hidden border border-white/10 aspect-[1200/628] relative max-w-4xl mx-auto shadow-2xl bg-white/5">
             <img 
               src={post.image} 
               alt={post.title} 
