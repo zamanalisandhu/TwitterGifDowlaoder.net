@@ -80,6 +80,16 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
         </div>
         
+        {post.image && (
+          <div className="mb-12 rounded-3xl overflow-hidden border border-white/10 aspect-video relative max-w-4xl mx-auto shadow-2xl bg-white/5">
+            <img 
+              src={post.image} 
+              alt={post.title} 
+              className="object-cover w-full h-full"
+            />
+          </div>
+        )}
+        
         {/* Article Schema */}
         <script
           type="application/ld+json"
