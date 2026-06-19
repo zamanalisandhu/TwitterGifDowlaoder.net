@@ -23,7 +23,7 @@ function calculateReadTime(text: string): string {
 export async function getBlogPosts(): Promise<Post[]> {
   try {
     const res = await fetch(`${WP_API_URL}/posts?_embed&per_page=100`, {
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 10 } // Cache for 10 seconds
     });
     
     if (!res.ok) {
@@ -66,7 +66,7 @@ export async function getBlogPosts(): Promise<Post[]> {
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   try {
     const res = await fetch(`${WP_API_URL}/posts?slug=${slug}&_embed`, {
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 10 } // Cache for 10 seconds
     });
 
     if (!res.ok) {
