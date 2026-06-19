@@ -40,7 +40,31 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-bold text-white mb-6 uppercase text-xs tracking-widest">Connect</h4>
+            <h4 className="font-bold text-white mb-6 uppercase text-xs tracking-widest">Recommended</h4>
+            <ul className="space-y-4 text-sm text-muted-foreground mb-6">
+              <li>
+                <a
+                  href="https://pinvideodownload.net/"
+                  target="_blank"
+                  rel="noopener"
+                  className="hover:text-primary transition-colors"
+                >
+                  Pinterest Downloader
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://rdtvideodownloader.com/"
+                  target="_blank"
+                  rel="noopener"
+                  className="hover:text-primary transition-colors"
+                >
+                  Reddit Downloader
+                </a>
+              </li>
+            </ul>
+
+            <h4 className="font-bold text-white mb-4 uppercase text-[10px] tracking-widest">Connect</h4>
             <div className="flex gap-4">
               <Link href="#" aria-label="Follow us on Twitter/X" className="w-12 h-12 rounded-xl glass flex items-center justify-center hover:text-primary transition-all border border-white/5">
                 <Twitter className="w-5 h-5" aria-hidden="true" />
