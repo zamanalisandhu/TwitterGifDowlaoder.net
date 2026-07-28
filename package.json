@@ -4,7 +4,8 @@
   "description": "Twitter GIF Downloader - Static PHP/JS Migration",
   "scripts": {
     "build:css": "tailwindcss -i ./css/input.css -o ./css/main.min.css --minify",
-    "watch:css": "tailwindcss -i ./css/input.css -o ./css/main.min.css --watch"
+    "watch:css": "tailwindcss -i ./css/input.css -o ./css/main.min.css --watch",
+    "vercel-build": "echo 'No build step required'"
   },
   "keywords": [],
   "author": "TwitterGIFDownloader.net",
