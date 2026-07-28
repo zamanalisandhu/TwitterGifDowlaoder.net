@@ -1,0 +1,22 @@
+# Dev-only files
+router.php
+.env
+.env.example
+.env.local
+
+# Build tools (not needed on Vercel)
+package.json
+package-lock.json
+tailwind.config.js
+css/input.css
+.npmrc
+node_modules
+
+# IDE & OS
+.DS_Store
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
