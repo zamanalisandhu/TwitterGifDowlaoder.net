@@ -1,6 +1,6 @@
 {
   "functions": {
-    "*.php": { "runtime": "vercel-php@0.7.3" }
+    "api/*.php": { "runtime": "vercel-php@0.7.3" }
   },
   "headers": [
     {
@@ -39,17 +39,18 @@
     }
   ],
   "routes": [
-    { "src": "/sitemap.xml", "dest": "/sitemap.php" },
-    { "src": "/robots.txt", "dest": "/robots.php" },
-    { "src": "/blog", "dest": "/blog.php" },
-    { "src": "/blog/(?<slug>[^/]+)", "dest": "/single-post.php?slug=$slug" },
-    { "src": "/about", "dest": "/about.php" },
-    { "src": "/contact", "dest": "/contact.php" },
-    { "src": "/privacy", "dest": "/privacy.php" },
-    { "src": "/terms", "dest": "/terms.php" },
-    { "src": "/dmca", "dest": "/dmca.php" },
+    { "src": "/sitemap.xml", "dest": "/api/sitemap.php" },
+    { "src": "/robots.txt", "dest": "/api/robots.php" },
+    { "src": "/blog", "dest": "/api/blog.php" },
+    { "src": "/blog/(?<slug>[^/]+)", "dest": "/api/single-post.php?slug=$slug" },
+    { "src": "/about", "dest": "/api/about.php" },
+    { "src": "/contact", "dest": "/api/contact.php" },
+    { "src": "/privacy", "dest": "/api/privacy.php" },
+    { "src": "/terms", "dest": "/api/terms.php" },
+    { "src": "/dmca", "dest": "/api/dmca.php" },
     { "src": "/(favicon.ico|manifest.json|ads.txt)", "dest": "/public/$1" },
     { "src": "/(css|js|images)/(.*)", "dest": "/$1/$2" },
-    { "src": "/(?<slug>[a-zA-Z0-9\\-]+)", "status": 301, "headers": { "Location": "/blog/$slug" } }
+    { "src": "/(?<slug>[a-zA-Z0-9\\-]+)", "status": 301, "headers": { "Location": "/blog/$slug" } },
+    { "src": "/$", "dest": "/api/index.php" }
   ]
 }

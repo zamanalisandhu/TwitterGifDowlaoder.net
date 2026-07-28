@@ -32,48 +32,48 @@ if (in_array($uri, ['/favicon.ico', '/manifest.json', '/ads.txt', '/apple-icon.p
 
 // 3. Vercel rewrites emulation
 if ($uri === '/sitemap.xml') {
-    include __DIR__ . '/sitemap.php';
+    include __DIR__ . '/api/sitemap.php';
     exit;
 }
 if ($uri === '/robots.txt') {
-    include __DIR__ . '/robots.php';
+    include __DIR__ . '/api/robots.php';
     exit;
 }
 if ($uri === '/blog') {
-    include __DIR__ . '/blog.php';
+    include __DIR__ . '/api/blog.php';
     exit;
 }
 if ($uri === '/about') {
-    include __DIR__ . '/about.php';
+    include __DIR__ . '/api/about.php';
     exit;
 }
 if ($uri === '/contact') {
-    include __DIR__ . '/contact.php';
+    include __DIR__ . '/api/contact.php';
     exit;
 }
 if ($uri === '/privacy') {
-    include __DIR__ . '/privacy.php';
+    include __DIR__ . '/api/privacy.php';
     exit;
 }
 if ($uri === '/terms') {
-    include __DIR__ . '/terms.php';
+    include __DIR__ . '/api/terms.php';
     exit;
 }
 if ($uri === '/dmca') {
-    include __DIR__ . '/dmca.php';
+    include __DIR__ . '/api/dmca.php';
     exit;
 }
 
 // 4. Dynamic routing (e.g. blog posts /blog/some-slug)
 if (preg_match('#^/blog/([^/]+)$#', $uri, $matches)) {
     $_GET['slug'] = $matches[1];
-    include __DIR__ . '/single-post.php';
+    include __DIR__ . '/api/single-post.php';
     exit;
 }
 
 // 5. Default fallback to homepage
 if ($uri === '' || $uri === '/') {
-    include __DIR__ . '/index.php';
+    include __DIR__ . '/api/index.php';
     exit;
 }
 
