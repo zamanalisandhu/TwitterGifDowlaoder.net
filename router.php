@@ -6,6 +6,11 @@ if ($uri !== '/' && substr($uri, -1) === '/') {
     $uri = rtrim($uri, '/');
 }
 
+// Map /css/* and /js/* requests to /public/* locally
+if (preg_match('#^/(css|js)/#', $uri)) {
+    $uri = '/public' . $uri;
+}
+
 // 1. Static files check
 if (file_exists(__DIR__ . $uri) && !is_dir(__DIR__ . $uri)) {
     return false; // serve as-is

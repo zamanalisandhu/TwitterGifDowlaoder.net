@@ -8,7 +8,7 @@ router.php
 package.json
 package-lock.json
 tailwind.config.js
-css/input.css
+public/css/input.css
 .npmrc
 node_modules
 

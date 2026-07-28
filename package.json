@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Twitter GIF Downloader - Static PHP/JS Migration",
   "scripts": {
-    "build:css": "tailwindcss -i ./css/input.css -o ./css/main.min.css --minify",
-    "watch:css": "tailwindcss -i ./css/input.css -o ./css/main.min.css --watch",
+    "build:css": "tailwindcss -i ./public/css/input.css -o ./public/css/main.min.css --minify",
+    "watch:css": "tailwindcss -i ./public/css/input.css -o ./public/css/main.min.css --watch",
     "vercel-build": "echo 'No build step required'"
   },
   "keywords": [],

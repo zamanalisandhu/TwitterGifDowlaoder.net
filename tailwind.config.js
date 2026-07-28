@@ -1,8 +1,8 @@
 module.exports = {
   darkMode: "class",
   content: [
-    "./*.php",
-    "./js/**/*.js"
+    "./api/**/*.php",
+    "./public/js/**/*.js"
   ],
   theme: {
     container: {

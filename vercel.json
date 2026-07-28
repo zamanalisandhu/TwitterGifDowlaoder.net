@@ -49,6 +49,7 @@
     { "src": "/terms", "dest": "/api/terms.php" },
     { "src": "/dmca", "dest": "/api/dmca.php" },
     { "src": "/(favicon.ico|manifest.json|ads.txt)", "dest": "/public/$1" },
+    { "src": "/(css|js)/(.*)", "dest": "/public/$1/$2" },
     { "src": "/(?<slug>[a-zA-Z0-9\\-]+)", "status": 301, "headers": { "Location": "/blog/$slug" } },
     { "src": "/$", "dest": "/api/index.php" }
   ]
