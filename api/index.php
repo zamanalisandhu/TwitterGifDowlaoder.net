@@ -66,13 +66,16 @@ $faqs = [
       <?php 
       $faq_schemas = [];
       foreach ($faqs as $faq) {
-          $faq_schemas[] = '{
-            "@type": "Question",
-            "name": "' . addslashes($faq['question']) . '",
-            "acceptedAnswer": { "@type": "Answer", "text": "' . addslashes($faq['answer']) . '" }
-          }';
+          $faq_schemas[] = [
+            '@type' => 'Question',
+            'name' => $faq['question'],
+            'acceptedAnswer' => [
+              '@type' => 'Answer',
+              'text' => $faq['answer']
+            ]
+          ];
       }
-      echo implode(",", $faq_schemas);
+      echo implode(",", array_map('json_encode', $faq_schemas));
       ?>
     ]
   },

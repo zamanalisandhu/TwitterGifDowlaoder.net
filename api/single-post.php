@@ -119,31 +119,34 @@ include 'header.php';
 
 <!-- JSON-LD BlogPosting Schema Markup -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "<?php echo addslashes($post['title']); ?>",
-  "image": "<?php echo addslashes($post['image']); ?>",
-  "datePublished": "<?php echo addslashes($post['date']); ?>",
-  "author": {
-    "@type": "Organization",
-    "name": "TwitterGIFDownloader",
-    "url": "https://twittergifdownloader.net"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "TwitterGIFDownloader",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://twittergifdownloader.net/og-image.png"
-    }
-  },
-  "description": "<?php echo addslashes($post['excerpt']); ?>",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://twittergifdownloader.net/blog/<?php echo addslashes($post['slug']); ?>"
-  }
-}
+<?php
+$schema = [
+  '@context' => 'https://schema.org',
+  '@type' => 'BlogPosting',
+  'headline' => $post['title'],
+  'image' => $post['image'],
+  'datePublished' => $post['date'],
+  'author' => [
+    '@type' => 'Organization',
+    'name' => 'TwitterGIFDownloader',
+    'url' => 'https://twittergifdownloader.net'
+  ],
+  'publisher' => [
+    '@type' => 'Organization',
+    'name' => 'TwitterGIFDownloader',
+    'logo' => [
+      '@type' => 'ImageObject',
+      'url' => 'https://twittergifdownloader.net/og-image.png'
+    ]
+  ],
+  'description' => $post['excerpt'],
+  'mainEntityOfPage' => [
+    '@type' => 'WebPage',
+    '@id' => 'https://twittergifdownloader.net/blog/' . $post['slug']
+  ]
+];
+echo json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+?>
 </script>
 
 <main id="main-content" class="min-h-screen saas-gradient text-slate-800">
