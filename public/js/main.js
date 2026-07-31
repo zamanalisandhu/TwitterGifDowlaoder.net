@@ -220,7 +220,7 @@
         });
     }
 
-    // --- Browser-based FFmpeg GIF Conversion ---
+    // --- Browser-based GIF Conversion (gif.js via canvas, no SharedArrayBuffer needed) ---
     async function handleGifDownload(sourceUrl, buttonElement) {
         buttonElement.disabled = true;
         const origContent = buttonElement.innerHTML;
@@ -229,64 +229,132 @@
             <span>Converting...</span>
         `;
 
-        // Display progress container
         progressContainer.classList.remove("hidden");
-        updateProgress(5, "Starting browser conversion...");
+        updateProgress(5, "Preparing GIF conversion...");
 
         try {
-            updateProgress(8, "Downloading ES modules...");
-            // Load FFmpeg via ESM modules
-            const { FFmpeg } = await import("https://esm.sh/@ffmpeg/ffmpeg@0.12.6");
-            const { fetchFile } = await import("https://esm.sh/@ffmpeg/util@0.12.2");
+            // Step 1: Load gif.js library
+            updateProgress(10, "Loading GIF encoder...");
+            await loadScript("https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js");
 
-            const ffmpeg = new FFmpeg();
+            // Step 2: Fetch the gif.js worker as a Blob (avoids cross-origin worker restriction)
+            updateProgress(18, "Loading encoder worker...");
+            const workerResp = await fetch("https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js");
+            const workerBlob = await workerResp.blob();
+            const workerBlobUrl = URL.createObjectURL(workerBlob);
 
-            updateProgress(15, "Downloading MP4 video source...");
+            // Step 3: Load video via proxy into a hidden <video> element
+            updateProgress(28, "Downloading video source...");
             const proxyUrl = `${API_URL}/?download=${encodeURIComponent(sourceUrl)}`;
-            const fileData = await fetchFile(proxyUrl);
 
-            updateProgress(35, "Loading FFmpeg core engine...");
-            await ffmpeg.load({
-                coreURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js',
-                wasmURL: 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm',
-                workerURL: 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/umd/ffmpeg-core.worker.js',
+            const videoBlob = await fetch(proxyUrl).then(r => r.blob());
+            const videoBlobUrl = URL.createObjectURL(videoBlob);
+
+            const video = document.createElement("video");
+            video.src = videoBlobUrl;
+            video.muted = true;
+            video.crossOrigin = "anonymous";
+            video.style.display = "none";
+            document.body.appendChild(video);
+
+            // Wait for video metadata
+            await new Promise((resolve, reject) => {
+                video.onloadedmetadata = resolve;
+                video.onerror = reject;
+                video.load();
             });
 
-            updateProgress(55, "Converting MP4 to high quality GIF...");
-            await ffmpeg.writeFile('input.mp4', fileData);
+            const duration  = video.duration;
+            const FPS       = 12;
+            const interval  = 1 / FPS;
+            const maxFrames = Math.min(Math.ceil(duration * FPS), 120); // cap at 120 frames
+            const W         = Math.min(video.videoWidth,  480);
+            const H         = Math.round(video.videoHeight * (W / video.videoWidth));
 
-            await ffmpeg.exec([
-                '-i', 'input.mp4',
-                '-vf', 'fps=15,scale=480:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=128[p];[s1][p]paletteuse=dither=bayer',
-                '-loop', '0',
-                'output.gif',
-            ]);
+            // Step 4: Set up canvas
+            const canvas  = document.createElement("canvas");
+            canvas.width  = W;
+            canvas.height = H;
+            const ctx = canvas.getContext("2d");
 
-            updateProgress(90, "Preparing file download...");
-            const gifData = await ffmpeg.readFile('output.gif');
-            const blob = new Blob([gifData], { type: 'image/gif' });
-            const downloadUrl = URL.createObjectURL(blob);
+            // Step 5: Set up gif.js
+            const gif = new GIF({ // eslint-disable-line no-undef
+                workers:      2,
+                quality:      8,
+                width:        W,
+                height:       H,
+                workerScript: workerBlobUrl,
+                repeat:       0
+            });
 
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = 'twitter.gif';
+            // Step 6: Capture frames by seeking through video
+            updateProgress(35, "Capturing frames...");
+            for (let i = 0; i < maxFrames; i++) {
+                const seekTime = i * interval;
+                await seekVideo(video, seekTime);
+                ctx.drawImage(video, 0, 0, W, H);
+                gif.addFrame(ctx, { copy: true, delay: Math.round(1000 / FPS) });
+
+                const pct = 35 + Math.round((i / maxFrames) * 45);
+                updateProgress(pct, `Capturing frame ${i + 1} of ${maxFrames}...`);
+            }
+
+            // Step 7: Render GIF
+            updateProgress(82, "Encoding GIF...");
+            const gifBlob = await new Promise((resolve, reject) => {
+                gif.on("finished", resolve);
+                gif.on("error",    reject);
+                gif.render();
+            });
+
+            // Step 8: Download
+            updateProgress(97, "Preparing download...");
+            const downloadUrl = URL.createObjectURL(gifBlob);
+            const link = document.createElement("a");
+            link.href     = downloadUrl;
+            link.download = "twitter.gif";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            URL.revokeObjectURL(downloadUrl);
 
-            updateProgress(100, "Download ready!");
-            setTimeout(() => {
-                progressContainer.classList.add("hidden");
-            }, 3000);
+            // Cleanup
+            URL.revokeObjectURL(downloadUrl);
+            URL.revokeObjectURL(videoBlobUrl);
+            URL.revokeObjectURL(workerBlobUrl);
+            document.body.removeChild(video);
+
+            updateProgress(100, "GIF downloaded!");
+            setTimeout(() => progressContainer.classList.add("hidden"), 3000);
+
         } catch (err) {
-            console.error("FFmpeg Error:", err);
+            console.error("GIF Conversion Error:", err);
             showStatus("error", "Conversion failed. Please try downloading the MP4 instead.");
             progressContainer.classList.add("hidden");
         } finally {
-            buttonElement.disabled = false;
+            buttonElement.disabled  = false;
             buttonElement.innerHTML = origContent;
         }
+    }
+
+    /** Seek a video element to a specific time, returns a Promise */
+    function seekVideo(video, time) {
+        return new Promise(resolve => {
+            const onSeeked = () => { video.removeEventListener("seeked", onSeeked); resolve(); };
+            video.addEventListener("seeked", onSeeked);
+            video.currentTime = time;
+        });
+    }
+
+    /** Dynamically load an external script once */
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            if (document.querySelector(`script[src="${src}"]`)) return resolve();
+            const s = document.createElement("script");
+            s.src = src;
+            s.onload  = resolve;
+            s.onerror = reject;
+            document.head.appendChild(s);
+        });
     }
 
     function updateProgress(pct, status) {
